@@ -1,68 +1,21 @@
-// State - count: 0
-// Action - INCREMENT, DECREMENT, RESET
-// Reducer
-// Store
+import 'bootstrap/dist/css/bootstrap.min.css';
+import * as bootstrap from 'bootstrap';
 
-const { createStore } = require('redux');
+import store from './store.js';
 
-// constants
+import { increment, decrement } from './reducers/counterReducer.js';
+import { addTask, toggleTask } from './reducers/todoReducer.js';
 
-const INCREMENT = 'INCREMENT';
-const DECREMENT = 'DECREMENT';
-const RESET = 'RESET';
+const decrementButton = document.getElementById('decrement');
+const incrementButton = document.getElementById('increment');
+const countElement = document.getElementById('count');
 
-const initialState = {
-    count: 0,
-};
-
-const incrementCounterAction = () => ({
-    type: INCREMENT,
-});
-
-const decrementCounterAction = () => ({
-    type: DECREMENT,
-});
-
-const resetCounterAction = () => ({
-    type: RESET,
-});
-
-// Creating reducer
-
-const counterReducer = (state = initialState, action) => {
-    switch (action.type) {
-        case INCREMENT:
-            return {
-                ...state,
-                count: state.count + 1,
-            };
-        case DECREMENT:
-            return {
-                ...state,
-                count: state.count - 1,
-            };
-        case RESET:
-            return {
-                ...state,
-                count: 0,
-            };
-        default:
-            return state;
-    }
-};
-
-// store
-const store = createStore(counterReducer);
+decrementButton.addEventListener('click', () => store.dispatch(decrement()));
+incrementButton.addEventListener('click', () => store.dispatch(increment()));
 
 store.subscribe(() => {
-    console.log(store.getState());
-});
+    const state = store.getState();
+    console.log(state);
 
-store.dispatch(incrementCounterAction());
-store.dispatch(incrementCounterAction());
-store.dispatch(incrementCounterAction());
-store.dispatch(incrementCounterAction());
-store.dispatch(incrementCounterAction());
-store.dispatch(decrementCounterAction());
-store.dispatch(resetCounterAction());
-store.dispatch(incrementCounterAction());
+    countElement.textContent = state.counter.count;
+});
